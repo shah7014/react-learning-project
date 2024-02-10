@@ -1,6 +1,7 @@
-import styled from "@emotion/styled";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import styled from "@emotion/styled";
+import { Box, Button, MenuItem, Typography } from "@mui/material";
+import Input from "./ui/Input";
 
 // {amount: 1, item: "", isPacked: false, index: 0}
 
@@ -16,15 +17,6 @@ const Form = styled("form")(({ theme }) => ({
 
   [theme.breakpoints.up("md")]: {
     flexDirection: "row",
-  },
-}));
-
-const Input = styled(TextField)(({ theme }) => ({
-  backgroundColor: "#ffebb3",
-  borderRadius: "100px",
-  outline: "none",
-  "& fieldset": {
-    border: "none",
   },
 }));
 
