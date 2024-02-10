@@ -20,7 +20,11 @@ const Header = () => {
       />
       <Typography
         variant="h1"
-        sx={{ fontFamily: "Monoton", textTransform: "uppercase" }}
+        sx={{
+          fontFamily: "Monoton",
+          textTransform: "uppercase",
+          textAlign: "center",
+        }}
       >
         React gone
       </Typography>

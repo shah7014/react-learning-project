@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import Header from "./components/Header";
 import ItinearyForm from "./components/ItinearyForm";
 import ItinearyList from "./components/ItinearyList";
+import ItinearyStats from "./components/ItinearyStats";
 
 const initialItienary = [
   { item: "Combs", amount: 2, isCompleted: false, index: 1 },
@@ -116,6 +117,7 @@ const App = () => {
           onChangeSortBy={handleSortByChange}
           onDeleteAll={handleDeleteAll}
         />
+        <ItinearyStats items={itinearyItems} />
       </Box>
     </ThemeProvider>
   );

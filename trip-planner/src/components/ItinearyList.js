@@ -27,8 +27,22 @@ const ItinearyList = ({
   onDeleteAll,
 }) => {
   return (
-    <Container maxWidth="md" sx={{ color: "#ffebb3", padding: "2rem" }}>
-      <Stack flexDirection={"row"} justifyContent={"center"} gap="2rem">
+    <Container
+      maxWidth="md"
+      sx={{
+        color: "#ffebb3",
+        padding: "2rem",
+        height: {
+          xs: "calc(100vh - 120px - 4rem)",
+          md: "calc(100vh - 150px - 4rem)",
+        },
+      }}
+    >
+      <Stack
+        sx={{ flexDirection: { xs: "column", md: "row" } }}
+        justifyContent={"center"}
+        gap="2rem"
+      >
         <Input select value={sortBy} onChange={onChangeSortBy}>
           {sortOptions.map((op) => (
             <MenuItem key={op.value} value={op.value}>
@@ -51,7 +65,14 @@ const ItinearyList = ({
           Clear List
         </Button>
       </Stack>
-      <Grid container sx={{ marginTop: "2rem" }}>
+      <Grid
+        container
+        sx={{
+          marginTop: "2rem",
+          height: { sx: "400px", sm: "auto" },
+          overflowY: "scroll",
+        }}
+      >
         {itinearyItems.map((item) => (
           <Grid item xs={12} sm={6} md={3} key={item.index}>
             <Stack flexDirection={"row"} alignItems={"center"}>
