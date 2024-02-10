@@ -18,8 +18,11 @@ const Header = () => {
         fontSize="large"
         sx={{ display: { xs: "none", md: "block" } }}
       />
-      <Typography variant="h1" sx={{ fontFamily: "Monoton" }}>
-        FAR AWAY
+      <Typography
+        variant="h1"
+        sx={{ fontFamily: "Monoton", textTransform: "uppercase" }}
+      >
+        React gone
       </Typography>
       <Luggage fontSize="large" sx={{ display: { xs: "none", md: "block" } }} />
     </Stack>
