@@ -12,6 +12,7 @@ const ItinearyStats = ({ items }) => {
         backgroundColor: "#76c7ad",
         color: "#fff",
       }}
+      component={"footer"}
     >
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
         {items.length > 0
