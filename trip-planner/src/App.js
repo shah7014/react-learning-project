@@ -26,7 +26,6 @@ const initialItienary = [
 
 const App = () => {
   const [itinearyItems, setItienaryItems] = useState(initialItienary);
-  const [sortBy, setSortBy] = useState("index");
 
   let theme = createTheme({
     palette: {
@@ -44,46 +43,15 @@ const App = () => {
       isCompleted: false,
       index: itinearyItems.length + 1,
     };
-    const sortedItems = handleSort(sortBy, [...itinearyItems, newItinearyItem]);
 
-    setItienaryItems(sortedItems);
-  };
-
-  const handleSort = (sortBy, items) => {
-    if (sortBy === "item") {
-      return items.sort((i1, i2) => {
-        let compare = 0;
-        if (i1.item.toUpperCase() > i2.item.toUpperCase()) {
-          compare = 1;
-        } else if (i1.item.toUpperCase() < i2.item.toUpperCase()) {
-          compare = -1;
-        }
-        return compare;
-      });
-    } else if (sortBy === "completed") {
-      const nonCompletedItems = handleSort(
-        "index",
-        items.filter((i) => !i.isCompleted)
-      );
-      const completedItems = handleSort(
-        "index",
-        items.filter((i) => i.isCompleted)
-      );
-      return [...nonCompletedItems, ...completedItems];
-    } else {
-      return items.sort((i1, i2) => i1.index - i2.index);
-    }
+    setItienaryItems((items) => [...items, newItinearyItem]);
   };
 
   const handleItemCompleted = (item) => (event) => {
-    const selectedItem = itinearyItems.find((i) => i.index === item.index);
-    selectedItem.isCompleted = event.target.checked;
-
     setItienaryItems((items) =>
-      handleSort(sortBy, [
-        ...items.filter((i) => i.index !== item.index),
-        selectedItem,
-      ])
+      items.map((i) =>
+        i.index === item.index ? { ...i, isCompleted: event.target.checked } : i
+      )
     );
   };
 
@@ -91,12 +59,6 @@ const App = () => {
     setItienaryItems((items) =>
       items.filter((i) => i.index !== toBeDeletedItem.index)
     );
-  };
-
-  const handleSortByChange = (e) => {
-    setSortBy(e.target.value);
-    const sortedItems = handleSort(e.target.value, itinearyItems);
-    setItienaryItems(sortedItems);
   };
 
   const handleDeleteAll = () => {
@@ -113,8 +75,6 @@ const App = () => {
           itinearyItems={itinearyItems}
           onItemCompleted={handleItemCompleted}
           onItemDelete={handleItemDelete}
-          sortBy={sortBy}
-          onChangeSortBy={handleSortByChange}
           onDeleteAll={handleDeleteAll}
         />
         <ItinearyStats items={itinearyItems} />

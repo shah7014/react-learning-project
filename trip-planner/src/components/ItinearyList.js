@@ -7,14 +7,14 @@ import {
   Grid,
   MenuItem,
   Stack,
-  TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Input from "./ui/Input";
+import Dialog from "./ui/Dialog";
 
 const sortOptions = [
-  { label: "SORT BY INPUT ORDER", value: "index" },
-  { label: "SORT BY ITEM ALPHABETICALLY", value: "item" },
+  { label: "Sort by INPUT ORDER", value: "index" },
+  { label: "SORT BY ITEM ALPHABETICALLY", value: "description" },
   { label: "SORT BY COMLPETED", value: "completed" },
 ];
 
@@ -22,84 +22,119 @@ const ItinearyList = ({
   itinearyItems,
   onItemCompleted,
   onItemDelete,
-  sortBy,
-  onChangeSortBy,
   onDeleteAll,
 }) => {
+  const [sortBy, setSortBy] = useState("index");
+
+  // dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  let sortedItinearyItems;
+
+  if (sortBy === "index") {
+    sortedItinearyItems = itinearyItems;
+  }
+
+  if (sortBy === "description") {
+    sortedItinearyItems = itinearyItems
+      .slice()
+      .sort((a, b) => a.item.toLowerCase().localeCompare(b.item.toLowerCase()));
+  }
+
+  if (sortBy === "completed") {
+    sortedItinearyItems = itinearyItems
+      .slice()
+      .sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
+  }
+
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        color: "#ffebb3",
-        padding: "2rem",
-        height: {
-          xs: "calc(100vh - 120px - 4rem)",
-          md: "calc(100vh - 150px - 4rem)",
-        },
-      }}
-    >
-      <Stack
-        sx={{ flexDirection: { xs: "column", md: "row" } }}
-        justifyContent={"center"}
-        gap="2rem"
-      >
-        <Input select value={sortBy} onChange={onChangeSortBy}>
-          {sortOptions.map((op) => (
-            <MenuItem key={op.value} value={op.value}>
-              {op.label}
-            </MenuItem>
-          ))}
-        </Input>
-        <Button
-          sx={{
-            backgroundColor: "#ffebb3",
-            borderRadius: "100px",
-            color: "#000",
-            "&:hover": {
-              backgroundColor: "red",
-            },
-          }}
-          variant="contained"
-          onClick={onDeleteAll}
-        >
-          Clear List
-        </Button>
-      </Stack>
-      <Grid
-        container
+    <>
+      <Container
+        maxWidth="md"
         sx={{
-          marginTop: "2rem",
-          height: { sx: "400px", sm: "auto" },
-          overflowY: "scroll",
+          color: "#ffebb3",
+          padding: "2rem",
+          marginBottom: "3rem",
         }}
       >
-        {itinearyItems.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={item.index}>
-            <Stack flexDirection={"row"} alignItems={"center"}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    color="secondary"
-                    checked={item.isCompleted}
-                    onChange={onItemCompleted(item)}
-                  />
-                }
-                label={`${item.amount} ${item.item}`}
-                sx={{
-                  "& span.MuiFormControlLabel-label ": {
-                    textDecoration: item.isCompleted ? "line-through" : "none",
-                  },
-                }}
-              />
-              <Clear
-                sx={{ color: "red", cursor: "pointer" }}
-                onClick={onItemDelete(item)}
-              />
-            </Stack>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+        <Stack
+          sx={{ flexDirection: { xs: "column", sm: "row" } }}
+          justifyContent={"center"}
+          gap="2rem"
+        >
+          <Input
+            select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            sx={{ width: { xs: "100%", sm: "300px", md: "350px" } }}
+          >
+            {sortOptions.map((op) => (
+              <MenuItem key={op.value} value={op.value}>
+                {op.label.toUpperCase()}
+              </MenuItem>
+            ))}
+          </Input>
+          <Button
+            sx={{
+              backgroundColor: "#ffebb3",
+              borderRadius: "100px",
+              color: "#000",
+              "&:hover": {
+                backgroundColor: "red",
+              },
+              "&:disabled": {
+                backgroundColor: "#c1c1c1",
+                color: "#000",
+              },
+            }}
+            variant="contained"
+            onClick={() => setIsDialogOpen(true)}
+            disabled={itinearyItems.length === 0}
+          >
+            Clear List
+          </Button>
+        </Stack>
+        <Grid
+          container
+          sx={{
+            marginTop: "2rem",
+          }}
+        >
+          {sortedItinearyItems.map((item) => (
+            <Grid item xs={12} sm={6} md={3} key={item.index}>
+              <Stack flexDirection={"row"} alignItems={"center"}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="secondary"
+                      checked={item.isCompleted}
+                      onChange={onItemCompleted(item)}
+                    />
+                  }
+                  label={`${item.amount} ${item.item}`}
+                  sx={{
+                    "& span.MuiFormControlLabel-label ": {
+                      textDecoration: item.isCompleted
+                        ? "line-through"
+                        : "none",
+                    },
+                  }}
+                />
+                <Clear
+                  sx={{ color: "red", cursor: "pointer" }}
+                  onClick={onItemDelete(item)}
+                />
+              </Stack>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onConfirmation={onDeleteAll}
+      />
+    </>
   );
 };
 
