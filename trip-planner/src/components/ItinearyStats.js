@@ -2,7 +2,23 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 
 const ItinearyStats = ({ items }) => {
-  const completedItems = items.filter((i) => i.isCompleted);
+  const numItems = items.length;
+
+  const numCompletedItems = items.filter((i) => i.isCompleted).length;
+
+  const completedItemsPercent = Math.round(
+    (numCompletedItems / numItems) * 100
+  );
+
+  const getStats = () => {
+    if (numItems === 0) {
+      return "🚢✈ Start Planning your trip now 🧰🚉";
+    }
+    if (numItems === numCompletedItems) {
+      return "🧰 You're all set to go 🚀";
+    }
+    return `💼 You have ${numItems} items on your list, and you already packed ${numCompletedItems} (${completedItemsPercent}%) for your trip 🚉`;
+  };
 
   return (
     <Box
@@ -15,13 +31,7 @@ const ItinearyStats = ({ items }) => {
       component={"footer"}
     >
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-        {items.length > 0
-          ? `💼You have ${
-              items.length
-            } items on your list, and you already packed ${
-              completedItems.length
-            }(${(completedItems.length / items.length) * 100}%)`
-          : "🚀Start Planning your trip now"}
+        {getStats()}
       </Typography>
     </Box>
   );
