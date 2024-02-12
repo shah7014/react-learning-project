@@ -58,7 +58,7 @@ const App = () => {
           const amount =
             billPayer.toLowerCase() === "you"
               ? -1 * otherPartyExpense
-              : otherPartyExpense;
+              : myExpense;
           val.amount = val.amount + amount;
         }
         return val;

@@ -3,8 +3,8 @@ import { Input, Surface, FormControl, Button } from "./ui";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 
 const SplitBillForm = ({ activeFlatMate, onBillSplit }) => {
-  const [totalBill, setTotalBill] = useState(0);
-  const [myExpense, setMyExpense] = useState(0);
+  const [totalBill, setTotalBill] = useState("");
+  const [myExpense, setMyExpense] = useState("");
   const flateMateExpense = Number(totalBill) - Number(myExpense);
 
   const [billPayer, setBillPayer] = useState("You");

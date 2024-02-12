@@ -45,13 +45,19 @@ const FlatMatesList = ({ flatMates, activeFlatMate, onSelectFlatMate }) => {
               <Typography variant="body1" fontWeight={"bold"}>
                 {name}
               </Typography>
-              <Typography variant="body2">
-                {amount === 0
-                  ? `You and ${name} are even`
-                  : amount < 0
-                  ? `${name} owes ${Math.abs(amount)}`
-                  : `You owe ${name} ${amount}`}
-              </Typography>
+              {amount === 0 && (
+                <Typography variant="body2">You and {name} are even</Typography>
+              )}
+              {amount > 0 && (
+                <Typography variant="body2" color={"red"}>
+                  You owe {name} {amount}
+                </Typography>
+              )}
+              {amount < 0 && (
+                <Typography variant="body2" color="green">
+                  {name} owes {Math.abs(amount)}
+                </Typography>
+              )}
             </Stack>
             <Button onClick={onSelectFlatMate(id)}>
               {id === activeFlatMate ? "Close" : "Select"}
