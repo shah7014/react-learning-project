@@ -19,7 +19,7 @@ const SplitBillForm = ({
   );
 
   useEffect(() => {
-    setBillPayer("You");
+    setBillPayer("user");
     setTotalBill("");
     setMyExpense("");
   }, [activeFlatMateId]);
