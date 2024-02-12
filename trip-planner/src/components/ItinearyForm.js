@@ -54,13 +54,11 @@ const ItinearyForm = ({ onNewItinearyAdd }) => {
           },
         }}
       >
-        {[...Array(10).keys()]
-          .map((x) => x + 1)
-          .map((x) => (
-            <MenuItem key={x} value={x}>
-              {x}
-            </MenuItem>
-          ))}
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((x) => (
+          <MenuItem key={x} value={x}>
+            {x}
+          </MenuItem>
+        ))}
       </Input>
       <Box
         sx={{

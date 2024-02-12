@@ -72,9 +72,18 @@ const ItinearyList = ({
           height: { sx: "400px", sm: "auto" },
           overflowY: "scroll",
         }}
+        component={"ul"}
       >
         {itinearyItems.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={item.index}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            key={item.index}
+            component={"li"}
+            sx={{ listStyle: "none" }}
+          >
             <Stack flexDirection={"row"} alignItems={"center"}>
               <FormControlLabel
                 control={
