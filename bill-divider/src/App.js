@@ -22,9 +22,6 @@ const App = () => {
   const [flatMates, setFlatMates] = useState([]);
 
   const [activeFlatMateId, setActiveFlatMateId] = useState(null);
-  const activeFlatMate = flatMates?.find(
-    (mate) => mate.id === activeFlatMateId
-  );
 
   const [isNewFlatMateFormOpen, setIsNewFlatMateOpenForm] = useState(false);
 
@@ -33,11 +30,8 @@ const App = () => {
   };
 
   const handleNewFlatMateAdd = (newFlatMate) => {
-    const initlaNumber = flatMates.length;
-    setFlatMates((val) => [
-      ...val,
-      { ...newFlatMate, id: initlaNumber + 1, amount: 0 },
-    ]);
+    setFlatMates((val) => [...val, { ...newFlatMate, amount: 0 }]);
+    setIsNewFlatMateOpenForm(false);
   };
 
   const handleActiveFlatMate = (index) => (e) => {
@@ -49,14 +43,12 @@ const App = () => {
   };
 
   const handleBillSplit = ({ totalBill, myExpense, billPayer }) => {
-    console.log({ totalBill, myExpense, billPayer });
-
     setFlatMates((data) =>
       data.map((val) => {
         const otherPartyExpense = totalBill - myExpense;
         if (val.id === activeFlatMateId) {
           const amount =
-            billPayer.toLowerCase() === "you"
+            billPayer.toLowerCase() === "user"
               ? -1 * otherPartyExpense
               : myExpense;
           val.amount = val.amount + amount;
@@ -101,12 +93,12 @@ const App = () => {
             )}
           </Grid>
           <Grid item xs={12} md={5}>
-            {activeFlatMate && (
-              <SplitBillForm
-                activeFlatMate={activeFlatMate}
-                onBillSplit={handleBillSplit}
-              />
-            )}
+            <SplitBillForm
+              flatMates={flatMates}
+              activeFlatMateId={activeFlatMateId}
+              onBillSplit={handleBillSplit}
+              handleActiveFlatMate={handleActiveFlatMate}
+            />
           </Grid>
         </Grid>
       </Container>

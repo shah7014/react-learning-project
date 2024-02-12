@@ -27,6 +27,9 @@ const FlatMatesList = ({ flatMates, activeFlatMate, onSelectFlatMate }) => {
             padding: "0 0.5rem",
             backgroundColor: id === activeFlatMate ? "#fff4e6" : "transparent",
             marginBottom: "1rem",
+            "&:hover": {
+              backgroundColor: "#fff4e6",
+            },
           }}
         >
           <CardMedia>
@@ -48,14 +51,18 @@ const FlatMatesList = ({ flatMates, activeFlatMate, onSelectFlatMate }) => {
               {amount === 0 && (
                 <Typography variant="body2">You and {name} are even</Typography>
               )}
+
+              {/* showing in red because this is the amount we owe to him */}
               {amount > 0 && (
                 <Typography variant="body2" color={"red"}>
-                  You owe {name} {amount}
+                  You owe {name} ${amount}
                 </Typography>
               )}
+
+              {/* showing this in green as this is the amount he owes to us */}
               {amount < 0 && (
                 <Typography variant="body2" color="green">
-                  {name} owes {Math.abs(amount)}
+                  {name} owes ${Math.abs(amount)}
                 </Typography>
               )}
             </Stack>

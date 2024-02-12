@@ -13,9 +13,10 @@ const FlatMateForm = ({ onFormClose, onNewFlatMateAdd }) => {
     if (name === "") {
       return;
     }
-    console.log({ name, image });
-    onNewFlatMateAdd({ name, image });
+    const id = crypto.randomUUID();
+    onNewFlatMateAdd({ name, image: `${image}?u=${id}`, id });
     setName("");
+    setImage("https://i.pravatar.cc/48");
   };
 
   return (

@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Surface, FormControl, Button } from "./ui";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 
-const SplitBillForm = ({ activeFlatMate, onBillSplit }) => {
+const SplitBillForm = ({
+  flatMates,
+  activeFlatMateId,
+  onBillSplit,
+  handleActiveFlatMate,
+}) => {
   const [totalBill, setTotalBill] = useState("");
   const [myExpense, setMyExpense] = useState("");
   const flateMateExpense = Number(totalBill) - Number(myExpense);
 
-  const [billPayer, setBillPayer] = useState("You");
+  const [billPayer, setBillPayer] = useState("user");
+
+  const activeFlatMate = flatMates?.find(
+    (mate) => mate.id === activeFlatMateId
+  );
+
+  useEffect(() => {
+    setBillPayer("You");
+    setTotalBill("");
+    setMyExpense("");
+  }, [activeFlatMateId]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (totalBill && myExpense) {
-      onBillSplit({ totalBill, myExpense, billPayer });
+    if (!totalBill && !myExpense) {
+      return;
     }
+
+    onBillSplit({ totalBill, myExpense, billPayer });
+    handleActiveFlatMate(activeFlatMateId)();
   };
+
+  if (!activeFlatMate) {
+    return <></>;
+  }
 
   return (
     <Surface sx={{ padding: "2rem" }}>
@@ -45,7 +67,13 @@ const SplitBillForm = ({ activeFlatMate, onBillSplit }) => {
           <Input
             id="yourExpense"
             value={myExpense}
-            onChange={(e) => setMyExpense(+e.target.value)}
+            onChange={(e) =>
+              setMyExpense(
+                Number(e.target.value) > Number(totalBill)
+                  ? Number(myExpense)
+                  : Number(e.target.value)
+              )
+            }
           />
         </FormControl>
         <FormControl>
@@ -65,10 +93,8 @@ const SplitBillForm = ({ activeFlatMate, onBillSplit }) => {
             value={billPayer}
             onChange={(e) => setBillPayer(e.target.value)}
           >
-            <MenuItem value={"You"}>You</MenuItem>
-            <MenuItem value={activeFlatMate.name}>
-              {activeFlatMate.name}
-            </MenuItem>
+            <MenuItem value={"user"}>You</MenuItem>
+            <MenuItem value={"friend"}>{activeFlatMate.name}</MenuItem>
           </TextField>
         </FormControl>
 
