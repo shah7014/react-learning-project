@@ -11,7 +11,7 @@ import { Button } from "./ui";
 
 const FlatMatesList = ({ flatMates, activeFlatMate, onSelectFlatMate }) => {
   if (flatMates.length === 0) {
-    return <Typography variant="h6">Plan a meal with falt mate</Typography>;
+    return <Typography variant="h6">Plan a meal with flat mate</Typography>;
   }
 
   return (

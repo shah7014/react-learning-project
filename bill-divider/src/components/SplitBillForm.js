@@ -18,12 +18,6 @@ const SplitBillForm = ({
     (mate) => mate.id === activeFlatMateId
   );
 
-  useEffect(() => {
-    setBillPayer("user");
-    setTotalBill("");
-    setMyExpense("");
-  }, [activeFlatMateId]);
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!totalBill && !myExpense) {

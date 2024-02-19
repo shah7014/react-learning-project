@@ -11,7 +11,6 @@ import {
 import FlatMatesList from "./components/FlatMatesList";
 import Button from "./components/ui/Button";
 import FlatMateForm from "./components/FlatMateForm";
-import { Surface } from "./components/ui";
 import SplitBillForm from "./components/SplitBillForm";
 
 const App = () => {
@@ -98,6 +97,7 @@ const App = () => {
               activeFlatMateId={activeFlatMateId}
               onBillSplit={handleBillSplit}
               handleActiveFlatMate={handleActiveFlatMate}
+              key={activeFlatMateId}
             />
           </Grid>
         </Grid>
