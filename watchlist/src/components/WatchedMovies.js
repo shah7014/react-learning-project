@@ -1,5 +1,4 @@
 import React from "react";
-import { MovieBox } from "./ui/MovieBox";
 import { MovieCard } from "./ui/MovieCard";
 import {
   CardContent,
@@ -9,14 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import MovieStatistics from "./MovieStatistics";
 
-const WatchedMovies = ({ watchedMovies }) => {
+const WatchedMovies = ({ watchedMovies, onRemove }) => {
   return (
-    <MovieBox>
-      <MovieStatistics watchedMovies={watchedMovies} />
+    <>
       {watchedMovies.map((movie) => (
-        <MovieCard>
+        <MovieCard key={movie.imdbID}>
           <CardMedia
             component={"img"}
             image={movie.Poster}
@@ -38,14 +35,14 @@ const WatchedMovies = ({ watchedMovies }) => {
                 👤⭐ {movie.userRating}
               </Typography>
               <Typography variant="subtitle1">⌛ {movie.runtime}</Typography>
-              <IconButton>
+              <IconButton onClick={onRemove(movie)}>
                 <Close sx={{ color: "red" }} />
               </IconButton>
             </Stack>
           </CardContent>
         </MovieCard>
       ))}
-    </MovieBox>
+    </>
   );
 };
 

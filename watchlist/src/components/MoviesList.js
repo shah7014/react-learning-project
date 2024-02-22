@@ -1,12 +1,5 @@
 import React from "react";
-import { MovieBox } from "./ui/MovieBox";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  styled,
-} from "@mui/material";
+import { CardContent, CardMedia, Typography, styled } from "@mui/material";
 import { MovieCard } from "./ui/MovieCard";
 
 const MovieItem = styled(MovieCard)(({ theme }) => ({
@@ -17,11 +10,11 @@ const MovieItem = styled(MovieCard)(({ theme }) => ({
   },
 }));
 
-const Movies = ({ movies }) => {
+const MoviesList = ({ movies, onSelect }) => {
   return (
-    <MovieBox>
+    <>
       {movies.map((movie) => (
-        <MovieItem key={movie.imdbID}>
+        <MovieItem key={movie.imdbID} onClick={onSelect(movie.imdbID)}>
           <CardMedia
             component={"img"}
             image={movie.Poster}
@@ -36,8 +29,8 @@ const Movies = ({ movies }) => {
           </CardContent>
         </MovieItem>
       ))}
-    </MovieBox>
+    </>
   );
 };
 
-export default Movies;
+export default MoviesList;

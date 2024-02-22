@@ -1,14 +1,7 @@
 import styled from "@emotion/styled";
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
-
-const average = (arr, property) => {
-  const sum = arr.reduce((acc, currVal) => acc + currVal[property], 0);
-  if (sum === 0) {
-    return 0;
-  }
-  return sum / arr.length;
-};
+import { average } from "../utils/movieUtils";
 
 const StatisticItem = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -22,10 +15,11 @@ const MovieStatistics = ({ watchedMovies }) => {
 
   const avgImdbRating = average(watchedMovies, "imdbRating");
   const avgUserRating = average(watchedMovies, "userRating");
-  const avgDuration = average(watchedMovies, "runtime");
+  const avgDuration = 0;
+  // const avgDuration = average(watchedMovies, "Runtime");
 
   return (
-    <Paper sx={{ backgroundColor: "transparent", padding: "1rem" }}>
+    <Paper sx={{ backgroundColor: "#343a40", padding: "1rem" }}>
       <Typography variant="h6" textTransform={"uppercase"} mb={"0.5rem"}>
         movies you watched
       </Typography>

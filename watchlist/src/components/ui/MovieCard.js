@@ -7,4 +7,8 @@ export const MovieCard = styled(Card)(({ theme }) => ({
   gap: "1.25rem",
   backgroundColor: "transparent",
   padding: "1rem",
+
+  "& .MuiCardContent-root, & .MuiCardContent-root:last-child": {
+    padding: 0,
+  },
 }));
