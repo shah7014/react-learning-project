@@ -15,15 +15,18 @@ import { MovieBox } from "./components/ui/MovieBox";
 import MovieStatistics from "./components/MovieStatistics";
 import { omdbApi } from "./utils/omdbApi";
 import ActiveMovie from "./components/ActiveMovie";
-import Rating from "./components/ui/Rating";
 import { getFromLocalStorage, saveToLocalStorage } from "./utils/movieUtils";
 
 const App = () => {
+  const[query, setQuery] = useState("")
+
+  // movies fetched based on query
   const [movies, setMovies] = useState([]);
   const [searchError, setSearchError] = useState("");
 
   const [watchedMovies, setWatchedMovies] = useState([]);
 
+  // user selected movie
   const [activeMovie, setActiveMovie] = useState(null);
   const [isActiveMovieLoading, setIsActiveMovieLoading] = useState(false);
 
@@ -31,6 +34,31 @@ const App = () => {
     const watchedMoviesFound = getFromLocalStorage("watched");
     setWatchedMovies(watchedMoviesFound);
   }, []);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await omdbApi.get(`/?s=${query}`);
+        if (response.data.Response !== "False") {
+          setMovies(response.data.Search);
+          setSearchError("");
+        }
+      } catch (error) {
+        setSearchError("Error Fetching searched movies");
+        setMovies([]);
+      }
+    };
+
+    if (query.length < 3) {
+      setMovies([]);
+      setSearchError("")
+      return;
+    }
+
+    fetchMovies();
+  }, [query]);
+
+
 
   let theme = createTheme({
     palette: {
@@ -50,20 +78,11 @@ const App = () => {
 
   theme = responsiveFontSizes(theme);
 
-  const handleMovieSearch = async (searchText) => {
-    try {
-      const response = await omdbApi.get(`/?s=${searchText}`);
-      if (response.data.Response !== "False") {
-        setMovies(response.data.Search);
-        setSearchError("");
-      }
-    } catch (error) {
-      setSearchError("Error Fetching searched movies");
-      setMovies([]);
-    }
-  };
-
   const handleSelectMovie = (movieId) => async () => {
+    if (movieId === activeMovie?.imdbID) {
+      setActiveMovie(null);
+      return;
+    }
     try {
       setIsActiveMovieLoading(true);
       const response = await omdbApi.get(`/?i=${movieId}`);
@@ -92,7 +111,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="xl" sx={{ marginTop: "1rem", marginBottom: "1rem" }}>
-        <NavBar moviesNumber={movies.length} onSearch={handleMovieSearch} />
+        <NavBar moviesNumber={movies.length} query={query} setQuery={setQuery} />
         <Container
           maxWidth="md"
           sx={{
@@ -113,7 +132,7 @@ const App = () => {
               <MovieBox>
                 {isActiveMovieLoading ? (
                   <Typography variant="h6">Loading...</Typography>
-                ) : activeMovie ? (
+                  ) : activeMovie ? (
                   <ActiveMovie
                     activeMovie={activeMovie}
                     onAddToWatchList={handleAddToWatchedList}

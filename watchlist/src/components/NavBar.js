@@ -1,14 +1,13 @@
+import React from "react";
 import {
   AppBar,
   Toolbar,
   Typography,
   styled,
   Input as MuiInput,
-  Box,
-  Button,
   Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+
 
 const Input = styled(MuiInput)(({ theme }) => ({
   borderRadius: "0.7rem",
@@ -23,8 +22,7 @@ const Input = styled(MuiInput)(({ theme }) => ({
   flex: 1,
 }));
 
-const NavBar = ({ moviesNumber = 0, onSearch }) => {
-  const [searchText, setSearchText] = useState("");
+const NavBar = ({ moviesNumber = 0, query, setQuery }) => {
 
   return (
     <AppBar
@@ -60,12 +58,9 @@ const NavBar = ({ moviesNumber = 0, onSearch }) => {
           <Input
             placeholder="Search..."
             disableUnderline
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
-          <Button sx={{ color: "yellow" }} onClick={() => onSearch(searchText)}>
-            Search
-          </Button>
         </Stack>
 
         <Typography
