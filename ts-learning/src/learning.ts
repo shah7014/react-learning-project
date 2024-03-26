@@ -50,7 +50,7 @@ userObj = {
 
 
 // Functions
-const convertToUpperCase = (data: string): string => data.toUpperCase()
+const convertToUpperCase = (data: string) : string => data.toUpperCase()
 
 function convertToLowerCase(data: string): string {
     return data.toLowerCase();
@@ -134,6 +134,39 @@ const post: IPost<IAuthor> = {
     id: 123,
     extra: [{userName: "user1", id: 1}]
 }
+//
+// type PartConquestIncentive = {
+//     startDate,
+//     endDate,
+//     percent
+// }
+//
+// type PeriodConquestIncentive = {
+//     startDate,
+//     endDate,
+//     part,
+//     percent
+// }
+//
+// type IncentiveTier = {
+//     tierName: string,
+//     baselineRange: {startAMount: number, endAMount: number},
+//     targetLevels?,
+//     loyaltyCap: {percentage: number, maxAmount: number},
+//     conquestIncentives: PartConquestIncentive[] | PeriodConquestIncentive[],
+//     rewardPayoutOption?
+// }
+
+// type IncentiveProgram = {
+//     programName: string,
+//     programCode: string,
+//     programStartDate,
+//     programEndDate,
+//     rewardStartDate,
+//     rewardEndDate,
+//     incentiveTiers: IncentiveTier[],
+//     status: "new" | "locked" | "inProgress" | "completed" | "rewardOpen" | "programClosed"
+// }
 
 
 export {};
