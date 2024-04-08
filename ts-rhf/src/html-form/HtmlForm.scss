@@ -24,6 +24,11 @@
         width: 80%;
         padding: 0.5rem;
         font-size: 1rem;
+
+        &:focus {
+          outline: orchid;
+          border: 2px solid orchid;
+        }
       }
 
       span {
