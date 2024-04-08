@@ -17,3 +17,24 @@ export type PostDetail = {
     body: string,
     user: UserDetail
 }
+
+export type Todo = {
+    id: string,
+    text: string,
+    isCompleted: Status,
+    color?: Color
+}
+
+export enum Color {
+    GREEN = "green",
+    BLUE = "blue",
+    ORANGE = "orange",
+    PURPLE = "purple",
+    RED = "red"
+}
+
+export enum Status {
+    ALL = "all",
+    ACTIVE = "active",
+    COMPLETED = "completed"
+}

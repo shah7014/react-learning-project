@@ -6,6 +6,7 @@ import PostsDetail from "./pages/PostDetail";
 import Home from "./pages/Home";
 import Loader from "./components/Loader";
 import Notification from "./components/Notification";
+import TodoPage from "./pages/TodoPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                 <Notification />
                 <Routes>
                     <Route path={"/"} element={<Home />}/>
+                    <Route path={"/todos"} element={<TodoPage />}/>
                     <Route path={"/posts"} element={<PostsList/>} />
                     <Route path={"/posts/:id"} element={<PostsDetail/>} />
                 </Routes>
