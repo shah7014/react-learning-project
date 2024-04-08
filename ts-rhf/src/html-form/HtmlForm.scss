@@ -1,0 +1,51 @@
+.container {
+  width: 100%;
+  max-width: 980px;
+  padding: 1rem;
+  margin-inline: auto;
+
+  h1 {
+    margin: 2rem 0;
+    color: orchid;
+  }
+
+  form.user-form {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+
+
+    .form-control {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      input {
+        width: 80%;
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+
+      span {
+        color: red;
+      }
+    }
+
+    button {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      background-color: orchid;
+      color: #fff;
+      font-weight: bold;
+
+      &:hover {
+      }
+    }
+  }
+}
+
