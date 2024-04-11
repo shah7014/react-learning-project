@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../state/store";
-import {postByIdSelector, updatedPost} from "./postsSlice";
+import {selectPostById, updatedPost} from "./postsSlice";
 import {usersSelector} from "../users/usersSlice";
 import {Button, MenuItem, TextField, Typography} from "@mui/material";
 import {Post} from "../../types";
@@ -13,7 +13,7 @@ const EditPostForm = () => {
 
     const navigate = useNavigate();
 
-    const post = useSelector((state: RootState) => postByIdSelector(state, Number(postId)));
+    const post = useSelector((state: RootState) => selectPostById(state, Number(postId)));
 
     const users = useSelector(usersSelector);
 

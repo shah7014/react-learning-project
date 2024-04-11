@@ -1,17 +1,16 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {postByIdSelector} from "./postsSlice";
+import {selectPostById} from "./postsSlice";
 import {RootState} from "../../state/store";
 import {Button, Stack, Typography} from "@mui/material";
 import {Link, useParams} from "react-router-dom";
-import {Post} from "../../types";
 import PostAuthor from "./PostAuthor";
 
 const SinglePost = () => {
 
     const {id: postId} = useParams();
 
-    const post = useSelector((state: RootState) => postByIdSelector(state, Number(postId)));
+    const post = useSelector((state: RootState) => selectPostById(state, Number(postId)));
 
     console.log(post)
 
