@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSelector, createSlice, PayloadAction, createEntityAdapter} from "@reduxjs/toolkit";
 import {Post, ReactionsType} from "../../types";
 import {RootState} from "../../state/store";
 import axios, {AxiosError} from "axios";
@@ -9,16 +9,32 @@ type PostState = {
     error: any
 }
 
-const initialState: PostState = {status: "idle", posts: [], error: null}
+const postsAdapter = createEntityAdapter({
+    selectId: (post: Post) => post.id
+});
+
+const newInitialState = postsAdapter.getInitialState<{
+    status: "idle" | "pending" | "succeeded" | "failed",
+    error: any
+}>({
+    status: "idle",
+    error: null
+})
+
+// const initialState: PostState = {status: "idle", posts: [], error: null}
 
 const postsSlice = createSlice({
     name: "posts",
-    initialState,
+    initialState: newInitialState,
     reducers: {
         addReaction: (state, action: PayloadAction<{ reactionName: ReactionsType, postId: number }>) => {
             const {reactionName, postId} = action.payload;
-            const post = state.posts.find(p => p.id === postId);
-            if (!!post) {
+            // const post = state.posts.find(p => p.id === postId);
+            // if (!!post) {
+            //     post.reactions[reactionName]++;
+            // }
+            const post = state.entities[postId];
+            if (post) {
                 post.reactions[reactionName]++;
             }
         }
@@ -28,14 +44,15 @@ const postsSlice = createSlice({
             state.status = "pending";
         }).addCase(loadPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
             state.status = "succeeded";
-            state.posts = action.payload.map(p => ({
+            const posts = action.payload.map(p => ({
                 ...p,
                 reactions: {
                     thumbsUp: 0,
                     rocket: 0,
                     coffee: 0,
                 }
-            }))
+            }));
+            postsAdapter.upsertMany(state, posts);
         }).addCase(loadPosts.rejected, (state, action) => {
             console.log("CATCHING rejected one", action.payload, action.error)
             state.status = "failed";
@@ -48,7 +65,7 @@ const postsSlice = createSlice({
             }
         }).addCase(addPost.fulfilled, (state, action: PayloadAction<Omit<Post, "reactions">>) => {
             const p: Post = {...action.payload, reactions: {thumbsUp: 0, rocket: 0, coffee: 0}}
-            state.posts.unshift(p);
+            postsAdapter.addOne(state, p);
         })
             .addCase(updatedPost.pending, (state) => {
                 state.status = "pending"
@@ -56,8 +73,7 @@ const postsSlice = createSlice({
             .addCase(updatedPost.fulfilled, (state, action) => {
                 console.log("UPDATED POST IN THUNK:-", action.payload);
                 state.status = "succeeded";
-                const posts = state.posts.filter(p => p.id !== action.payload.id);
-                state.posts = [...posts, action.payload]
+                postsAdapter.upsertOne(state, action.payload)
             })
             .addCase(updatedPost.rejected, (state, action) => {
                 state.error = action.payload?.message;
@@ -117,7 +133,7 @@ export const addPost = createAsyncThunk(
 export const updatedPost = createAsyncThunk<
     Post,
     Partial<Post>,
-    {rejectValue: {message: string}}
+    { rejectValue: { message: string } }
 >(
     "posts/editPost",
     async (post: Partial<Post>, thunkAPI) => {
@@ -130,9 +146,26 @@ export const updatedPost = createAsyncThunk<
     }
 )
 
-export const postsSelector = (state: RootState) => state.posts.posts;
+export const {
+    selectIds: selectAllPostIds,
+    selectEntities,
+    selectTotal,
+    selectAll: selectAllPosts,
+    selectById: selectPostById
+} = postsAdapter.getSelectors((state: RootState) => state.posts);
 
-export const postByIdSelector = (state: RootState, id: number) => state.posts.posts.find(p => p.id === id);
+
+// TODO: Issue here is the filter always generates a new copy, so need to use memoized selector
+// export const postByUserIdSelector = (state: RootState, userId: number) => {
+//     return state.posts.entities.filter(p => p.userId === userId);
+// }
+
+export const postsByUserIdMemoizedSelector = createSelector(
+    [selectAllPosts, (state, userId) => userId],
+    (allPosts, userId) => {
+        return allPosts.filter(p => p.userId === userId);
+    }
+)
 
 export const {addReaction} = postsSlice.actions;
 

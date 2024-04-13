@@ -2,19 +2,10 @@ import React from "react";
 import "./HtmlForm.scss";
 import {SubmitErrorHandler, SubmitHandler, useForm} from "react-hook-form";
 import {DevTool} from "@hookform/devtools";
-import {z, ZodType} from "zod";
+import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-interface IFormData {
-    firstName: string,
-    lastName: string,
-    email: string,
-    age: number,
-    password: string,
-    confirmPassword: string
-}
-
-const userFormSchema: ZodType<IFormData> = z.object({
+const userFormSchema = z.object({
     firstName: z.string().min(2).max(30),
     lastName: z.string().min(2).max(30),
     email: z.string().email(),
@@ -24,24 +15,29 @@ const userFormSchema: ZodType<IFormData> = z.object({
 }).refine(data => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"]
-})
+});
+
+type FormData = z.infer<typeof userFormSchema>
 
 
 const HtmlForm: React.FC = () => {
 
     const {
-        register, handleSubmit, formState: {errors},
-        control
-    } = useForm<IFormData>({
+        register,
+        handleSubmit,
+        formState: {errors, isSubmitting},
+        control,
+        reset
+    } = useForm<FormData>({
         resolver: zodResolver(userFormSchema),
         mode: "onBlur"
     });
 
-    const onValid: SubmitHandler<IFormData> = (data) => {
+    const onValid: SubmitHandler<FormData> = (data) => {
         console.log("USER DATA:- ", data);
     }
 
-    const onInvalid: SubmitErrorHandler<IFormData> = (errors) => {
+    const onInvalid: SubmitErrorHandler<FormData> = (errors) => {
         console.log("ERRORS:- ", errors)
     }
 
