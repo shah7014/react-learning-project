@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getUsers, usersSelector} from "./features/users/userSlice";
 import {AppDispatch} from "./store";
 import CommentsList from "./features/comments/CommentsList";
+import ContactsList from "./features/contacts/ContactsList";
 
 function App() {
 
@@ -22,7 +23,9 @@ function App() {
             <Container maxWidth={"lg"}>
                 <Typography variant={"h3"} component={"h1"} textAlign={"center"} sx={{margin: "2rem 0"}}>This is sample EntityAdapter RTK </Typography>
 
-                <CommentsList />
+                <ContactsList />
+
+                {/*<CommentsList />*/}
             </Container>
             {/*<Box>*/}
             {/*    <Typography variant={"h3"}>Hell World</Typography>*/}
