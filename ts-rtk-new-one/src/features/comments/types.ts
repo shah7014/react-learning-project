@@ -1,9 +1,15 @@
 export type TComment = {
     id: string,
     body: string,
-    postId: number,
-    tags?: TTag[],
-    likes?: TLike[]
+    tagIds: string[],
+    likeIds: string[]
+}
+
+export type TCommentResponse = {
+    id: string,
+    body: string,
+    tags: TTag[],
+    likes: TLike[]
 }
 
 export type TTag = {

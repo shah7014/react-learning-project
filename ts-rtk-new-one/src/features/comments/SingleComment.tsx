@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store";
-import {deleteCommentById, selectCommentById} from "./commentsSlice";
-import {Button, Card, CardActions, CardContent, Stack, Typography} from "@mui/material";
+import {deleteCommentById, selectCommentById, selectTagsForComment} from "./commentsSlice";
+import {Button, Card, CardActions, CardContent, Chip, Stack, Typography} from "@mui/material";
 import EditComment from "./EditComment";
 
 const SingleComment = ({commentId}: { commentId: string }) => {
@@ -10,6 +10,8 @@ const SingleComment = ({commentId}: { commentId: string }) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const comment = useSelector((state: RootState) => selectCommentById(state, commentId));
+
+    const tagsForComment = useSelector((state: RootState) => selectTagsForComment(state, comment.tagIds));
 
     const [open, setOpen] = useState(false);
 
@@ -26,6 +28,7 @@ const SingleComment = ({commentId}: { commentId: string }) => {
                 <CardContent>
                     <Typography variant={"h6"}>({comment.id})</Typography>
                     <Typography variant={"body1"}>{comment.body}</Typography>
+                    {tagsForComment.map((tag) => <Chip label={tag.jobType} key={tag.id} />)}
                 </CardContent>
                 <CardActions>
                     <Button variant={"contained"} color={"error"} onClick={() => dispatch(deleteCommentById(commentId))}>Delete</Button>
