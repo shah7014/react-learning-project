@@ -5,7 +5,8 @@ export type Post = {
     title: string,
     body: string,
     userId: number,
-    reactions: Record<ReactionsType, number>
+    reactions: Record<ReactionsType, number>,
+    date: string
 }
 
 export type User = {
