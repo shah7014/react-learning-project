@@ -11,9 +11,9 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 
-store.dispatch(usersExtendedApiSlice.endpoints?.getAllUsers.initiate());
-
-store.dispatch(todosExtendedApiSlice.endpoints.getAllTodos.initiate())
+// store.dispatch(usersExtendedApiSlice.endpoints?.getAllUsers.initiate());
+//
+// store.dispatch(todosExtendedApiSlice.endpoints.getAllTodos.initiate())
 
 root.render(
     <React.StrictMode>

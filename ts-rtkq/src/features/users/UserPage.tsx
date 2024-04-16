@@ -1,18 +1,27 @@
 import React from "react";
 import {Link, useParams} from "react-router-dom";
-import {useGetTodosByUserIdQuery} from "../todos/todosSlice";
 import {Stack, Typography} from "@mui/material";
+import {useGetPostsByUserIdQuery} from "../posts/postsSlice";
+import {useGetAllUsersQuery} from "./usersSlice";
 
 const UserPage = () => {
 
-    const {id} = useParams();
+    const {id: userId} = useParams() as {id: string};
+
+    const {user} = useGetAllUsersQuery(undefined, {
+        selectFromResult: ({data, isLoading}) => {
+            return {
+                user: data?.entities[userId]
+            }
+        }
+    });
 
     const {
         data,
         isLoading,
-        isSuccess,
-        error
-    } = useGetTodosByUserIdQuery(Number(id));
+        isSuccess
+    } = useGetPostsByUserIdQuery(userId);
+
 
     let content;
 
@@ -25,8 +34,8 @@ const UserPage = () => {
             gap={"1rem"}
             alignSelf={"flex-start"}
         >
-            {ids.map(id => <Link to={`/todos/${id}`}>{entities[id]?.title}</Link>)}
-
+            <Typography variant={"h3"}>{user?.name}</Typography>
+            {ids.map(id => <Link to={`/posts/${id}`}>{entities[id]?.title}</Link>)}
         </Stack>
     }
 
