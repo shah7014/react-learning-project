@@ -1,10 +1,19 @@
 import React, {useState} from "react";
-import {useCreateTodoMutation, useDeleteTodoMutation, useGetAllTodosQuery, useUpdateTodoMutation} from "../api/apiSlice";
 import {Box, Checkbox, IconButton, Paper, styled, TextField, Typography} from "@mui/material";
 import {Delete, Upload, Visibility} from "@mui/icons-material";
 import {TTodo} from "../../model/Todo";
 import {v4 as uuid} from "uuid";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {
+    selectAllTodos,
+    useCreateTodoMutation,
+    useDeleteTodoMutation,
+    useGetAllTodosQuery,
+    useUpdateTodoMutation
+} from "./todosSlice";
+import {useSelector} from "react-redux";
+import {selectUserById} from "../users/usersSlice";
+import {RootState} from "../../store";
 
 const Form = styled("form")({
     display: "flex",
@@ -16,27 +25,30 @@ const Form = styled("form")({
     background: "#FFFAFA"
 })
 
+const TodoAuthor = ({userId}: {userId: any}) => {
+
+    const author = useSelector((state: RootState) => selectUserById(state, userId));
+
+    return <Link to={`/users/${userId}`}>{author?.name}</Link>
+}
+
 const TodoOperations = () => {
 
     const [title, setTitle] = useState("")
 
-    const {data: todos, isLoading, error} = useGetAllTodosQuery();
-
-    const [updateTodo] = useUpdateTodoMutation();
+    const {
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetAllTodosQuery()
+    const todos = useSelector(selectAllTodos);
 
     const [deleteTodo] = useDeleteTodoMutation();
 
     const [createTodo] = useCreateTodoMutation();
 
     const navigate = useNavigate();
-
-    const handleUpdate = async (todo: TTodo) => {
-        try {
-            await updateTodo(todo).unwrap()
-        } catch (err) {
-            console.log("Error updating todo with id:-", todo.id)
-        }
-    }
 
     const handleDelete = (todoId: string) => async () => {
         try {
@@ -84,19 +96,20 @@ const TodoOperations = () => {
 
 
         {isLoading && <Typography textAlign={"center"} variant={"h5"}>Loading...</Typography>}
-        {error && <Typography textAlign={"center"} color={"error"} variant={"h5"}>{error.toString()}</Typography>}
-        {todos && todos.map(t => (
+        {isError && <Typography textAlign={"center"} color={"error"} variant={"h5"}>{error.toString()}</Typography>}
+        {todos && Object.values(todos).map(t => (
             <Paper key={t.id}
                    sx={{
                        display: "flex",
-                       flexDirection: "row",
+                       flexDirection: "column",
                        margin: "2rem 0",
-                       alignItems: "center",
-                       justifyContent: "space-between",
-                       padding: "1.5rem"
+                       padding: "1.5rem",
+                       gap: "1rem"
                    }}
             >
                 <Typography variant={"h6"}>{t.title}</Typography>
+                <Typography variant={"body1"}>{t.date}</Typography>
+                <TodoAuthor userId={t.userId} />
                 <Box>
                     <IconButton sx={{color: "orchid"}} onClick={() => navigate(`/todos/${t.id}`)}>
                         <Visibility />
