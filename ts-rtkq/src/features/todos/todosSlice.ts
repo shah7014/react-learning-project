@@ -124,7 +124,8 @@ export const {
     useCreateTodoMutation,
     useUpdateTodoMutation,
     useDeleteTodoMutation,
-    useGetTodosByUserIdQuery
+    useGetTodosByUserIdQuery,
+    useLazyGetAllTodosQuery
 } = todosExtendedApiSlice;
 
 const selectTodosResultData = todosExtendedApiSlice.endpoints.getAllTodos.select();

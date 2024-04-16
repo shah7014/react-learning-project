@@ -73,6 +73,6 @@ const postsExtendedSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetAllPostsQuery,
-    useGetPostsByUserIdQuery
+    useGetPostsByUserIdQuery,
 } = postsExtendedSlice;
 

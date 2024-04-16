@@ -17,8 +17,16 @@ import UserPage from "./features/users/UserPage";
 import NavBar from "./components/NavBar";
 import PostsList from "./features/posts/PostsList";
 import SinglePostPage from "./features/posts/SinglePostPage";
+import {useLazyGetAllTodosQuery} from "./features/todos/todosSlice";
 
 const App = () => {
+
+    const [loadTodos] = useLazyGetAllTodosQuery();
+
+    const handleClick = async () => {
+        const response = await loadTodos().unwrap();
+        console.log(response);
+    }
 
     let theme = createTheme({
         palette: {
@@ -33,25 +41,33 @@ const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <NavBar />
+            <NavBar/>
             <Container
                 maxWidth={"md"}
                 sx={{
                     padding: "1.5rem"
                 }}
             >
+                <Button
+                    onClick={handleClick}
+                    variant={"contained"}
+                    color={"warning"}
+                    sx={{margin: "2rem"}}
+                >
+                    Click here to lazy load todos
+                </Button>
                 <Routes>
                     <Route path={"/todos"} element={<TodoOperations/>}/>
-                    <Route path={"/todos/:id"} element={<SingleTodo  />}/>
-                    <Route path={"/todos/edit/:id"} element={<EditTodo  />}/>
+                    <Route path={"/todos/:id"} element={<SingleTodo/>}/>
+                    <Route path={"/todos/edit/:id"} element={<EditTodo/>}/>
 
-                    <Route path={"/users"} element={<UsersList />}/>
-                    <Route path={"/users/:id"} element={<UserPage />}/>
+                    <Route path={"/users"} element={<UsersList/>}/>
+                    <Route path={"/users/:id"} element={<UserPage/>}/>
 
-                    <Route path={"/"} element={<PostsList />}/>
+                    <Route path={"/"} element={<PostsList/>}/>
                     <Route path={"/posts"} element={<PostsList/>}/>
-                    <Route path={"/posts/:id"} element={<SinglePostPage  />}/>
-                    <Route path={"/posts/edit/:id"} element={<EditTodo  />}/>
+                    <Route path={"/posts/:id"} element={<SinglePostPage/>}/>
+                    <Route path={"/posts/edit/:id"} element={<EditTodo/>}/>
                 </Routes>
             </Container>
         </ThemeProvider>
