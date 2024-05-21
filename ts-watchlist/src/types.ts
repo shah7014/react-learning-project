@@ -1,11 +1,11 @@
-export type Movie = {
+export type TMovie = {
     Title: string;
     Year: string;
     imdbID: string;
     Poster: string;
 }
 
-export type MovieInformation = {
+export type TMovieInformation = {
     Title: string,
     Year: string,
     Runtime?: string,
@@ -21,7 +21,16 @@ export type MovieInformation = {
 }
 
 
-export type MovieResponse = {
-    Search: Movie[],
+export type TMovieResponse = {
+    Search: TMovie[],
     Response?: "True" | "False" | "true" | "false"
+}
+
+export type TWatchedMovie = {
+    imdbID: string,
+    userRating: number,
+    imdbRating: number,
+    title: string,
+    poster: string,
+    runtime: number
 }

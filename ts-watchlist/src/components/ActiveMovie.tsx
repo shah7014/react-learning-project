@@ -1,13 +1,13 @@
-import React, {useState} from "react";
-import {MovieInformation} from "../types";
+import React, {useEffect, useState} from "react";
+import {TMovieInformation, TWatchedMovie} from "../types";
 import {Box, Button, Card, CardContent, CardMedia, Paper, Stack, Typography} from "@mui/material";
 import StarRating from "./ui/StarRating";
 
 interface IProps {
-    activeMovie: MovieInformation,
+    activeMovie: TMovieInformation,
     onRemoveActiveMovie: () => void,
-    onAddToWatchList: (m: MovieInformation) => void,
-    watchedMovies: any[]
+    onAddToWatchList: (m: TWatchedMovie) => void,
+    watchedMovies: TWatchedMovie[]
 }
 
 
@@ -17,9 +17,44 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
 
     const [userRating, setUserRating] = useState<number>(0);
 
+    useEffect(() => {
+        if (activeMovie) {
+            document.title = `Movie | ${activeMovie.Title}`
+        }
+
+    //     after unmounting of component when activeMovie is set to null we want to revert back to original title
+
+        return () => {
+            document.title = 'Movie List'
+        }
+    }, [activeMovie])
+
+
+
+// addEventListener for listening to 'backspace' key
+    useEffect(() => {
+
+        const listener = (evt: any) => {
+            if (evt.code.toLowerCase() === 'backspace') {
+                    onRemoveActiveMovie();
+                    // console.log("CLOSING")
+                }
+            };
+
+        document.addEventListener("keydown", listener)
+
+        return () => {
+            document.removeEventListener("keydown", listener)
+        }
+    }, [onRemoveActiveMovie])
+
     const handleAddToWatchList = () => {
-        const movie = {
-            ...activeMovie,
+        const movie: TWatchedMovie = {
+            imdbID: activeMovie.imdbID,
+            poster: activeMovie.Poster,
+            imdbRating: Number(activeMovie.imdbRating),
+            runtime: Number(activeMovie.Runtime?.split(" ")[0]),
+            title: activeMovie.Title,
             userRating: userRating
         }
         onAddToWatchList(movie);
@@ -55,9 +90,10 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
             <Stack flexDirection={"column"}
                    justifyContent={"space-between"}
             >
+                {/*if movie already rated, then don't allow to add again*/}
                 {Boolean(correspondingWatchedMovie) ? (
                     <Typography variant={"body1"}>
-                        You rated this movie 🌟 {correspondingWatchedMovie.starRating}
+                        You rated this movie 🌟 {correspondingWatchedMovie?.userRating}
                     </Typography>
                 ) : (
                     <>

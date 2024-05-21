@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {ThemeProvider, responsiveFontSizes, createTheme, CssBaseline, Container, Grid, Typography} from "@mui/material"
 import Navbar from "./components/Navbar";
 import {omdbApi} from "./utils/omdbApi";
-import {Movie, MovieInformation, MovieResponse} from "./types";
+import {TMovie, TMovieInformation, TMovieResponse, TWatchedMovie} from "./types";
 import {MovieBox} from "./components/ui/MovieBox";
 import MovieList from "./components/MovieList";
 import ActiveMovie from "./components/ActiveMovie";
 import MovieStatistics from "./components/MovieStatistics";
 import WatchedMovies from "./components/WatchedMovies";
+import axios from "axios";
 
 function App() {
 
@@ -31,15 +32,18 @@ function App() {
 
     const [query, setQuery] = useState("");
 
-
-    const [movies, setMovies] = useState<Movie[]>([]);
+    // searchedMovies coming from API
+    const [movies, setMovies] = useState<TMovie[]>([]);
     const moviesNumber = movies.length;
     const [searchError, setSearchError] = useState("");
 
-    const [activeMovie, setActiveMovie] = useState<MovieInformation | null>(null);
+    // movie that user has selected to view more information for
+    // this will make another API call to get the selected movie details
+    const [activeMovie, setActiveMovie] = useState<TMovieInformation | null>(null);
     const [isActiveMovieLoading, setIsActiveMovieLoading] = useState(false);
 
-    const [watchedMovies, setWatchedMovies] = useState([]);
+    // movies that are rated by user, and added to watchList
+    const [watchedMovies, setWatchedMovies] = useState<TWatchedMovie[]>([]);
 
     const handleMovieSelect = (movieId: string) => async () => {
         console.log("ACTIVE:- ", movieId);
@@ -49,7 +53,7 @@ function App() {
                 return;
             }
             setIsActiveMovieLoading(true);
-            const response = await omdbApi.get<MovieInformation>(`?i=${movieId}`);
+            const response = await omdbApi.get<TMovieInformation>(`?i=${movieId}`);
             setActiveMovie(response.data);
         } catch (err) {
             console.log(err);
@@ -62,20 +66,31 @@ function App() {
         setActiveMovie(null);
     }
 
-    const handleAddToWatchList = (movie: MovieInformation) => {
+    const handleAddToWatchList = (newlyWatchedMovie: TWatchedMovie) => {
+        setWatchedMovies(movies => ([...movies, newlyWatchedMovie]))
     }
 
+
     useEffect(() => {
+
+        const controller = new AbortController();
         const fetchMovies = async () => {
             try {
-                const response = await omdbApi.get<MovieResponse>(`?s=${query}`);
+                const response = await omdbApi.get<TMovieResponse>(`?s=${query}`, {
+                    signal: controller.signal
+                });
                 if (response.data.Response !== "False") {
                     setMovies(response.data.Search);
                     setSearchError("");
                 }
             } catch (err) {
-                setSearchError(`Error seraching movie with query ${query}`);
-                setMovies([]);
+                if (axios.isCancel(err)) {
+                    console.log("Request cancelled");
+                } else {
+                    setSearchError(`Error searching movie with query ${query}`);
+                    setMovies([]);
+                }
+
             }
         }
         if (query.length <= 3) {
@@ -85,7 +100,11 @@ function App() {
         }
 
         fetchMovies();
-    }, [query])
+
+        return () => {
+            controller.abort();
+        }
+    }, [query]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -120,7 +139,7 @@ function App() {
                                         /> :
                                         <>
                                             <MovieStatistics/>
-                                            <WatchedMovies/>
+                                            <WatchedMovies watchedMovies={watchedMovies}/>
                                         </>
                                 }
                             </MovieBox>

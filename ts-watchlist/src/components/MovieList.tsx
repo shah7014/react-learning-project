@@ -1,5 +1,5 @@
 import React from "react";
-import {Movie} from "../types";
+import {TMovie} from "../types";
 import {CardContent, CardMedia, styled, Typography} from "@mui/material";
 import {MovieCard} from "./ui/MovieCard";
 
@@ -12,7 +12,7 @@ const MovieItem = styled(MovieCard)(({theme}) => ({
 }))
 
 interface IProps {
-    movies: Movie[],
+    movies: TMovie[],
     onMovieSelect: (id: string) => () => void
 }
 
