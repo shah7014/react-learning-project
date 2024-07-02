@@ -43,10 +43,13 @@ function App() {
     const [isActiveMovieLoading, setIsActiveMovieLoading] = useState(false);
 
     // movies that are rated by user, and added to watchList
-    const [watchedMovies, setWatchedMovies] = useState<TWatchedMovie[]>([]);
+    const [watchedMovies, setWatchedMovies] = useState<TWatchedMovie[]>(() => {
+        return JSON.parse(localStorage.getItem("watchedMovies") || "[]");
+    });
+
 
     const handleMovieSelect = (movieId: string) => async () => {
-        console.log("ACTIVE:- ", movieId);
+        // console.log("ACTIVE:- ", movieId);
         try {
             if (activeMovie?.imdbID === movieId) {
                 setActiveMovie(null);
@@ -70,6 +73,11 @@ function App() {
         setWatchedMovies(movies => ([...movies, newlyWatchedMovie]))
     }
 
+
+    // update localStorage with updated watchedMovies
+    useEffect(() => {
+        localStorage.setItem("watchedMovies", JSON.stringify(watchedMovies));
+    }, [watchedMovies]);
 
     useEffect(() => {
 
@@ -98,6 +106,8 @@ function App() {
             setSearchError("");
             return;
         }
+
+        handleRemoveActiveMovie();
 
         fetchMovies();
 

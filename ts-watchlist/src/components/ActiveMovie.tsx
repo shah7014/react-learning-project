@@ -22,13 +22,12 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
             document.title = `Movie | ${activeMovie.Title}`
         }
 
-    //     after unmounting of component when activeMovie is set to null we want to revert back to original title
+        // after unmounting of component when activeMovie is set to null we want to revert back to original title
 
         return () => {
-            document.title = 'Movie List'
+            document.title = 'Movie List';
         }
     }, [activeMovie])
-
 
 
 // addEventListener for listening to 'backspace' key
@@ -36,10 +35,10 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
 
         const listener = (evt: any) => {
             if (evt.code.toLowerCase() === 'backspace') {
-                    onRemoveActiveMovie();
-                    // console.log("CLOSING")
-                }
-            };
+                onRemoveActiveMovie();
+                // console.log("CLOSING")
+            }
+        };
 
         document.addEventListener("keydown", listener)
 

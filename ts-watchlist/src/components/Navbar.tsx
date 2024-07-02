@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {AppBar, Stack, Toolbar, Typography, Input as MuiInput, styled, Button, Box} from "@mui/material";
 
 interface IProps {
@@ -25,6 +25,36 @@ const Navbar: React.FC<IProps> = ({query, setQuery, moviesNumber = 0}: IProps) =
     const queryChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
     }
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+
+            if(document.activeElement === inputRef.current)
+                return;
+
+            if (e.code.toLowerCase() === 'enter') {
+                setQuery("");
+                inputRef.current?.focus();
+            }
+        }
+        document.addEventListener("keydown", listener);
+
+        // cleanup
+        return () => {
+            document.removeEventListener("keydown", listener);
+        }
+    }, [setQuery]);
+
+    // TODO: not a good way to select DOM elements directly in React
+    // useEffect(() => {
+    //     const input = document.querySelector<HTMLInputElement>('#search-bar');
+    //     if (input) {
+    //         input.focus();
+    //     }
+    // }, []);
+
 
     return <AppBar position={"static"} sx={{
         marginTop: "1rem",
@@ -54,6 +84,8 @@ const Navbar: React.FC<IProps> = ({query, setQuery, moviesNumber = 0}: IProps) =
                 placeholder={"Search..."}
                 value={query}
                 onChange={queryChangeHandler}
+                id={'search-bar'}
+                inputRef={inputRef}
             />
 
             {/*Movies Number*/}
