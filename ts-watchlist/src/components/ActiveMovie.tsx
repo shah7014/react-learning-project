@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {TMovieInformation, TWatchedMovie} from "../types";
 import {Box, Button, Card, CardContent, CardMedia, Paper, Stack, Typography} from "@mui/material";
 import StarRating from "./ui/StarRating";
@@ -16,6 +16,13 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
     const correspondingWatchedMovie = watchedMovies.find(m => m.imdbID === activeMovie.imdbID);
 
     const [userRating, setUserRating] = useState<number>(0);
+
+    const countRef = useRef(0);
+
+    const handleRatingChange = (rating: number) => {
+        setUserRating(rating);
+        countRef.current = countRef.current + 1;
+    }
 
     useEffect(() => {
         if (activeMovie) {
@@ -54,7 +61,8 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
             imdbRating: Number(activeMovie.imdbRating),
             runtime: Number(activeMovie.Runtime?.split(" ")[0]),
             title: activeMovie.Title,
-            userRating: userRating
+            userRating: userRating,
+            count: countRef.current
         }
         onAddToWatchList(movie);
         onRemoveActiveMovie();
@@ -96,7 +104,7 @@ const ActiveMovie: React.FC<IProps> = ({activeMovie, onRemoveActiveMovie, onAddT
                     </Typography>
                 ) : (
                     <>
-                        <StarRating maxRating={10} onChange={setUserRating}/>
+                        <StarRating maxRating={10} onChange={handleRatingChange}/>
                         {userRating > 0 && (
                             <Button variant={"contained"} onClick={handleAddToWatchList}>
                                 + Add to list

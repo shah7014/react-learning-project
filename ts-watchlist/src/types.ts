@@ -32,5 +32,6 @@ export type TWatchedMovie = {
     imdbRating: number,
     title: string,
     poster: string,
-    runtime: number
+    runtime: number,
+    count: number
 }

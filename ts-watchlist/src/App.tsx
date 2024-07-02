@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {ThemeProvider, responsiveFontSizes, createTheme, CssBaseline, Container, Grid, Typography} from "@mui/material"
+import React, {useState} from 'react';
+import {Container, createTheme, CssBaseline, Grid, responsiveFontSizes, ThemeProvider, Typography} from "@mui/material"
 import Navbar from "./components/Navbar";
 import {omdbApi} from "./utils/omdbApi";
-import {TMovie, TMovieInformation, TMovieResponse, TWatchedMovie} from "./types";
+import {TMovieInformation, TWatchedMovie} from "./types";
 import {MovieBox} from "./components/ui/MovieBox";
 import MovieList from "./components/MovieList";
 import ActiveMovie from "./components/ActiveMovie";
 import MovieStatistics from "./components/MovieStatistics";
 import WatchedMovies from "./components/WatchedMovies";
-import axios from "axios";
+import {useMovies} from "./hooks/useMovies";
+import {useLocalStorageState} from "./hooks/useLocalStorageState";
 
 function App() {
 
@@ -32,20 +33,19 @@ function App() {
 
     const [query, setQuery] = useState("");
 
-    // searchedMovies coming from API
-    const [movies, setMovies] = useState<TMovie[]>([]);
-    const moviesNumber = movies.length;
-    const [searchError, setSearchError] = useState("");
-
     // movie that user has selected to view more information for
     // this will make another API call to get the selected movie details
     const [activeMovie, setActiveMovie] = useState<TMovieInformation | null>(null);
     const [isActiveMovieLoading, setIsActiveMovieLoading] = useState(false);
 
+
+    // searchedMovies coming from API
+    const {movies, searchError} = useMovies(query, setActiveMovie);
+    const moviesNumber = movies.length;
+
     // movies that are rated by user, and added to watchList
-    const [watchedMovies, setWatchedMovies] = useState<TWatchedMovie[]>(() => {
-        return JSON.parse(localStorage.getItem("watchedMovies") || "[]");
-    });
+    const [watchedMovies, setWatchedMovies] =
+        useLocalStorageState<TWatchedMovie[]>([], 'watchedMovies')
 
 
     const handleMovieSelect = (movieId: string) => async () => {
@@ -72,49 +72,6 @@ function App() {
     const handleAddToWatchList = (newlyWatchedMovie: TWatchedMovie) => {
         setWatchedMovies(movies => ([...movies, newlyWatchedMovie]))
     }
-
-
-    // update localStorage with updated watchedMovies
-    useEffect(() => {
-        localStorage.setItem("watchedMovies", JSON.stringify(watchedMovies));
-    }, [watchedMovies]);
-
-    useEffect(() => {
-
-        const controller = new AbortController();
-        const fetchMovies = async () => {
-            try {
-                const response = await omdbApi.get<TMovieResponse>(`?s=${query}`, {
-                    signal: controller.signal
-                });
-                if (response.data.Response !== "False") {
-                    setMovies(response.data.Search);
-                    setSearchError("");
-                }
-            } catch (err) {
-                if (axios.isCancel(err)) {
-                    console.log("Request cancelled");
-                } else {
-                    setSearchError(`Error searching movie with query ${query}`);
-                    setMovies([]);
-                }
-
-            }
-        }
-        if (query.length <= 3) {
-            setMovies([]);
-            setSearchError("");
-            return;
-        }
-
-        handleRemoveActiveMovie();
-
-        fetchMovies();
-
-        return () => {
-            controller.abort();
-        }
-    }, [query]);
 
     return (
         <ThemeProvider theme={theme}>
