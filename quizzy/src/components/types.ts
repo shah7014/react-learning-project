@@ -6,10 +6,9 @@ export type TQuestion = {
 }
 
 export enum AppStates {
-    LOADING,
-    ERROR,
-    READY,
-    ACTIVE,
-    FINISHED
+    LOADING = 'LOADING',
+    ERROR = 'ERROR',
+    READY = 'READY',
+    ACTIVE = 'ACTIVE',
+    FINISHED = 'FINISHED'
 }
-

@@ -16,9 +16,14 @@ export const StyleButton = styled(Button, {
     padding: '1rem 2rem',
     fontSize: '1.25rem',
     justifyContent: textAlign === "left" ? "flex-start" : "center",
+    color: "#fff",
 
     "&:hover": {
         backgroundColor: theme.palette.background.default,
+    },
+
+    "&:disabled": {
+        cursor: "not-allowed"
     }
 }));
 

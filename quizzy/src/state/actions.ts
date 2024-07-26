@@ -2,12 +2,13 @@ import {TQuestion} from "../components/types";
 
 
 export enum Actions {
-    SET_ERROR,
-    SET_READY ,
-    SET_QUIZ_START,
-    SET_QUIZ_FINISHED,
-    SET_SCORE,
-    GO_TO_NEXT
+    SET_ERROR = 'SET_ERROR',
+    SET_READY = 'SET_READY',
+    SET_QUIZ_START = 'SET_QUIZ_START',
+    SET_ANSWER = 'SET_ANSWER',
+    SET_QUIZ_FINISHED = 'SET_QUIZ_FINISHED',
+    SET_SCORE = 'SET_SCORE',
+    GO_TO_NEXT = 'GO_TO_NEXT'
 }
 
 type TSetErrorStatusAction = {
@@ -21,6 +22,11 @@ type TQuizReadyAction = {
 
 type TQuizStartAction = {
     type: Actions.SET_QUIZ_START
+}
+
+type TSetAnswerAction = {
+    type: Actions.SET_ANSWER,
+    payload: number
 }
 
 type TQuizFinishedAction = {
@@ -42,6 +48,7 @@ export type TAction =
     | TQuizStartAction
     | TQuizFinishedAction
     | TVerifyAndSetScore
-    | TGoToNextQuestion;
+    | TGoToNextQuestion
+    | TSetAnswerAction;
 
 

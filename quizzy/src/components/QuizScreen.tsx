@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext} from "react";
 import {AppContext} from "../state/AppContext";
 import {Box, LinearProgress, Stack, Typography} from "@mui/material";
 import {StyleButton} from "./Button";
@@ -6,19 +6,13 @@ import {Actions} from "../state/actions";
 
 const QuizScreen: React.FC = () => {
 
-    const {state: {questions, currentQuestionNumber, score, maxScore}, dispatch} = useContext(AppContext);
+    const {state: {questions, currentQuestionNumber, score, maxScore, newAnswer}, dispatch} = useContext(AppContext);
 
     const {question, points, correctOption, options} = questions[currentQuestionNumber];
     const progress = ((currentQuestionNumber) / questions.length) * 100;
 
-
-    const [isOptionSelected, setIsOptionSelected] = useState(false);
-
     const handleVerifyAnswer = (optionSelected: number) => () => {
-        setIsOptionSelected(true)
-        if (optionSelected === correctOption) {
-            dispatch({type: Actions.SET_SCORE, payload: points});
-        }
+        dispatch({type: Actions.SET_ANSWER, payload: optionSelected})
     }
 
     const handleNextClick = () => {
@@ -28,10 +22,6 @@ const QuizScreen: React.FC = () => {
     const handleFinishClick = () => {
         dispatch({type: Actions.SET_QUIZ_FINISHED});
     }
-
-    useEffect(() => {
-        setIsOptionSelected(false);
-    }, [currentQuestionNumber]);
 
     return <Box sx={{marginTop: "1.5rem", width: "70%"}}>
 
@@ -65,10 +55,10 @@ const QuizScreen: React.FC = () => {
                 gap={"0.75rem"}
             >
                 {options.map((option, index) => <StyleButton
-                    disabled={isOptionSelected}
+                    disabled={newAnswer !== null}
                     key={option} textAlign={"left"}
                     onClick={handleVerifyAnswer(index)}
-                    bgColor={!isOptionSelected ? "default" : (index === correctOption ? "primary" : "warning")}
+                    bgColor={newAnswer === null ? "default" : (index === correctOption ? "primary" : "warning")}
                 >
                     {option}
                 </StyleButton>)}
@@ -83,9 +73,9 @@ const QuizScreen: React.FC = () => {
             sx={{marginTop: "2rem"}}
         >
             <StyleButton>Timer</StyleButton>
-            {(isOptionSelected && questions.length > currentQuestionNumber + 1) &&
+            {(newAnswer !== null && questions.length > currentQuestionNumber + 1) &&
                 <StyleButton onClick={handleNextClick}>Next</StyleButton>}
-            {(isOptionSelected && questions.length === currentQuestionNumber + 1) &&
+            {(newAnswer !== null && questions.length === currentQuestionNumber + 1) &&
                 <StyleButton onClick={handleFinishClick}>Finish</StyleButton>}
         </Stack>
     </Box>
