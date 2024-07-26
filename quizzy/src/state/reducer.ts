@@ -7,7 +7,8 @@ export type TInitialState = {
     score: number,
     newAnswer: number | null,
     currentQuestionNumber: number,
-    maxScore: number
+    maxScore: number,
+    secondsRemaining: number
 }
 
 export const initialState: TInitialState = {
@@ -16,7 +17,8 @@ export const initialState: TInitialState = {
     score: 0,
     currentQuestionNumber: 0,
     newAnswer: null,
-    maxScore: 0
+    maxScore: 0,
+    secondsRemaining: 10
 }
 
 export const reducer = (state = initialState, action: TAction) => {
@@ -45,7 +47,8 @@ export const reducer = (state = initialState, action: TAction) => {
                 status: AppStates.ACTIVE,
                 currentQuestionNumber: 0,
                 score: 0,
-                newAnswer: null
+                newAnswer: null,
+                secondsRemaining: 10
             }
         }
         case Actions.SET_ANSWER: {
@@ -68,6 +71,13 @@ export const reducer = (state = initialState, action: TAction) => {
             return {
                 ...state,
                 status: AppStates.FINISHED
+            }
+        }
+        case Actions.TICK: {
+            return {
+                ...state,
+                secondsRemaining: state.secondsRemaining - 1,
+                status: state.secondsRemaining === 0 ? AppStates.FINISHED : AppStates.ACTIVE
             }
         }
         default: {

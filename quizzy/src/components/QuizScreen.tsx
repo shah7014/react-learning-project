@@ -3,6 +3,7 @@ import {AppContext} from "../state/AppContext";
 import {Box, LinearProgress, Stack, Typography} from "@mui/material";
 import {StyleButton} from "./Button";
 import {Actions} from "../state/actions";
+import Timer from "./Timer";
 
 const QuizScreen: React.FC = () => {
 
@@ -72,7 +73,9 @@ const QuizScreen: React.FC = () => {
             alignItems={"center"}
             sx={{marginTop: "2rem"}}
         >
-            <StyleButton>Timer</StyleButton>
+
+            <Timer />
+
             {(newAnswer !== null && questions.length > currentQuestionNumber + 1) &&
                 <StyleButton onClick={handleNextClick}>Next</StyleButton>}
             {(newAnswer !== null && questions.length === currentQuestionNumber + 1) &&

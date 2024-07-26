@@ -8,7 +8,8 @@ export enum Actions {
     SET_ANSWER = 'SET_ANSWER',
     SET_QUIZ_FINISHED = 'SET_QUIZ_FINISHED',
     SET_SCORE = 'SET_SCORE',
-    GO_TO_NEXT = 'GO_TO_NEXT'
+    GO_TO_NEXT = 'GO_TO_NEXT',
+    TICK = 'TICK'
 }
 
 type TSetErrorStatusAction = {
@@ -42,6 +43,10 @@ type TGoToNextQuestion = {
     type: Actions.GO_TO_NEXT
 }
 
+type TTickAction = {
+    type: Actions.TICK
+}
+
 export type TAction =
     | TSetErrorStatusAction
     | TQuizReadyAction
@@ -49,6 +54,7 @@ export type TAction =
     | TQuizFinishedAction
     | TVerifyAndSetScore
     | TGoToNextQuestion
-    | TSetAnswerAction;
+    | TSetAnswerAction
+    | TTickAction;
 
 
