@@ -1,0 +1,30 @@
+.pricingPage {
+    margin: 2.5rem;
+    padding: 2.5rem 5rem;
+    background-color: var(--color-dark--1);
+    min-height: calc(100vh - 5rem);
+}
+
+.pricingPage section {
+    margin: 6rem auto;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    gap: 7rem;
+}
+
+.pricingPage img {
+    width: 80%;
+}
+
+.pricingPage h2 {
+    font-size: 4rem;
+    line-height: 1.2;
+    margin-bottom: 3rem;
+}
+
+.pricingPage p {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+}

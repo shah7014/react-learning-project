@@ -1,0 +1,34 @@
+.productPage {
+    margin: 2.5rem;
+    padding: 2.5rem 5rem;
+    background-color: var(--color-dark--1);
+    min-height: calc(100vh - 5rem);
+}
+
+.productPage section {
+    margin: 6rem auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 7rem;
+}
+
+.productPage img {
+    width: 100%;
+}
+
+.productPage h2 {
+    font-size: 4rem;
+    line-height: 1.2;
+    margin-bottom: 3rem;
+}
+
+.productPage p {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+}
+
+.productPage section a {
+    margin-top: 2rem;
+}

@@ -1,0 +1,37 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    height: 5.2rem;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.navbar a:link,
+.navbar a:visited {
+    text-decoration: none;
+    color: var(--color-light--2);
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.navbar :global(.active) {
+    color: var(--color-brand--2) !important;
+}
+
+a.ctaLink:link,
+a.ctaLink:visited {
+    background-color: var(--color-brand--2);
+    color: var(--color-dark--0);
+    padding: 0.8rem 2rem;
+    border-radius: 7px;
+}
