@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 
 import HomePage from "./pages/HomePage.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
@@ -10,6 +10,8 @@ import AppLayout from "./pages/AppLayout.tsx";
 import CityList from "./components/CityList.tsx";
 import {TCity} from "./types.ts";
 import CountryList from "./components/CountryList.tsx";
+import City from "./components/City.tsx";
+import Form from "./components/Form.tsx";
 
 const API_URL = 'http://localhost:3001';
 
@@ -31,9 +33,11 @@ const App: React.FC = () => {
                 <Route path={"pricing"} element={<PricingPage/>}/>
                 <Route path={"login"} element={<LoginPage/>}/>
                 <Route path={"app"} element={<AppLayout/>}>
-                    <Route index element={<CityList cities={cities}/>}/>
+                    <Route index element={<Navigate replace to={'cities'} />}/>
                     <Route path={"cities"} element={<CityList cities={cities}/>}/>
+                    <Route path={"cities/:cityId"} element={<City cities={cities} />}/>
                     <Route path={"countries"} element={<CountryList cities={cities} />}/>
+                    <Route path={"form"} element={<Form />}/>
                 </Route>
                 <Route path={"*"} element={<NotFoundPage/>}/>
             </Routes>
