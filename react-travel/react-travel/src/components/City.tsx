@@ -1,32 +1,22 @@
+import React, {useEffect} from "react";
+
 import styles from "./City.module.css";
 import {NavLink, useParams} from "react-router-dom";
 import Message from "./Message.tsx";
-import {TCity} from "../types.ts";
-import React from "react";
+import {useCitiesContext} from "../context/CitiesContext.tsx";
 
-// const formatDate = (date) =>
-//     new Intl.DateTimeFormat("en", {
-//         day: "numeric",
-//         month: "long",
-//         year: "numeric",
-//         weekday: "long",
-//     }).format(new Date(date));
-
-interface IProps {
-    cities: TCity[];
-}
-
-const City: React.FC<IProps> = ({cities}) => {
+const City: React.FC = () => {
 
     const {cityId} = useParams();
+    const {getCurrentCity, currentCity} = useCitiesContext();
 
-    if (!cityId) {
-        return <Message message={'Invalid City Name'}/>
-    }
+    useEffect(() => {
+        if (cityId) {
+            getCurrentCity(cityId);
+        }
+    }, [cityId]);
 
-    const currentCity = cities.find(c => c.id.toString() === cityId);
-
-    if(!currentCity) {
+    if (!currentCity) {
         return <Message message={'City Not FOund'}/>
     }
 

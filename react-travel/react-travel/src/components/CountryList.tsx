@@ -1,14 +1,12 @@
 import React from "react";
 
 import styles from "./CountryList.module.css";
-import {TCity, TCountry} from "../types.ts";
+import {TCountry} from "../types.ts";
+import {useCitiesContext} from "../context/CitiesContext.tsx";
 
+const CountryList: React.FC = () => {
 
-interface IProps {
-    cities: TCity[]
-}
-
-const CountryList: React.FC<IProps> = ({cities}) => {
+    const {cities} = useCitiesContext();
 
     // To find unique elements using filter
     // const countries = cities

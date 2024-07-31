@@ -8,9 +8,16 @@ export type TCity = {
         lat: number,
         lng: number
     },
-    id: number
+    id: number | string
 }
 
 export type TCountry = {
     country: string, id: number, emoji: string
+}
+
+export type TGeoLocationResponse = {
+    city?: string;
+    locality?: string;
+    countryName?: string;
+    countryCode: string;
 }
