@@ -14,7 +14,7 @@ const City: React.FC = () => {
         if (cityId) {
             getCurrentCity(cityId);
         }
-    }, [cityId]);
+    }, [cityId, getCurrentCity]);
 
     if (!currentCity) {
         return <Message message={'City Not FOund'}/>

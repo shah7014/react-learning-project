@@ -21,3 +21,12 @@ export type TGeoLocationResponse = {
     countryName?: string;
     countryCode: string;
 }
+
+export type TUser = {
+    name: string,
+    email: string,
+    password: string,
+    avatar: string,
+}
+
+
